@@ -22,9 +22,14 @@ namespace cs3505
 {
   /* Node class for holding elements. */
 
+    /* Note:  Do not alter the next line of code.  My tester will 
+   * re-write the 'class node' to 'class node : private auditor' 
+   * so that it inherits from my auditing class (harmlessly). 
+   */
+
   class node
   {
-    friend class string_set;   // This allows functions in string_set to access
+    friend class string_set;   // This allows functions in string_set access
  
     private:
     //node constructors and destructor

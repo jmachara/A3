@@ -14,9 +14,9 @@
 * stores a string value and a vector of pointers to other nodes.
 */
 cs3505::node::node(const std::string & value)
+     :data(value), next_nodes()
 {
-     this->data = value;
-     this->next_nodes;
+
 }
 /*
 * node destructor
@@ -28,6 +28,9 @@ cs3505::node::~node()
      {
           delete this->next_nodes.front();
      }
-     next_nodes.clear();
+     for(int i = 0; i < next_nodes.size(); i++)
+     {
+          this->next_nodes.at(i) = NULL;
+     }
 }
 

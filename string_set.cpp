@@ -31,6 +31,7 @@ namespace cs3505
       this->size = 0;
       this->head = new node("");
       head->next_nodes = std::vector<node*>(max_width, NULL);
+      srand(time(NULL));
   }
 
   
@@ -91,38 +92,17 @@ namespace cs3505
     //create the new node
     node *new_node = new node(target);
     new_node->next_nodes = std::vector<node*>();
-    int node_width = random_width(max_width);
-    //put previous nodes next nodes in the new node, and have them point to the new node
-    for(int i = 0; i < node_width; i++)
+    int node_width = 0;
+    //add pointers to the node for every width from the prev nodes, and 
+    //point to their next. 
+    while((rand()%10 > 4) && (node_width < max_width) || (node_width == 0))
     {
-      new_node->next_nodes.push_back(prev_nodes.at(i)->next_nodes.at(i));
-      prev_nodes.at(i)->next_nodes.at(i) = new_node;
+      new_node->next_nodes.push_back(prev_nodes.at(node_width)->next_nodes.at(node_width));
+      prev_nodes.at(node_width)->next_nodes.at(node_width) = new_node;
+      node_width++;
     }
     this->size++;
           
-  }
-  /**
-   * generates a random width for a node
-   * @width_max is the biggest width the 
-   */ 
-  int string_set::random_width(int width_max)
-  {
-      int count = 1;
-        srand(time(NULL));
-        while(count < width_max + 1)
-        {
-          int num = rand() % 10;
-          if(num > 4)
-          {
-            count++;
-          }
-          else
-          {
-            break;
-          }
-          
-        }
-        return count;
   }
 /**
  *  remove: removes @target string value if it is in the string_set.
@@ -150,7 +130,8 @@ namespace cs3505
     */
 
     node *node_to_remove = prev_nodes.front()->next_nodes.front();
-    for(int i = 0; i < node_to_remove->next_nodes.size(); i++)
+    int remove_next_nodes_size = node_to_remove->next_nodes.size();
+    for(int i = 0; i < remove_next_nodes_size; i++)
     {
       prev_nodes.at(i)->next_nodes.at(i) = node_to_remove->next_nodes.at(i);
       node_to_remove->next_nodes.at(i) = NULL;
