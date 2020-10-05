@@ -57,7 +57,6 @@ namespace cs3505
  */
   void string_set::clean()
   {
-    //deletes the string_set if there is one. 
     if(this->head != NULL)
     {
         delete this->head;
@@ -72,14 +71,17 @@ namespace cs3505
  */
   void string_set::add(const std::string & target)
   {
-    std::vector<node*> prev_nodes = std::vector<node*>(max_width, head);
+    //point current at the head node and fill the previous node vector with it.
+    node *current = head;
+    std::vector<node*> prev_nodes = std::vector<node*>(max_width, NULL);
     for(int i = max_width-1; i >= 0; i--)
     {
       //find the node before where we want to add our node
-      while((prev_nodes.at(i)->next_nodes.at(i) != NULL) && (target.compare(prev_nodes.at(i)->next_nodes.at(i)->data) > 0))
+      while((current->next_nodes.at(i) != NULL) && (target.compare(current->next_nodes.at(i)->data) > 0))
       {
-          prev_nodes.at(i)->next_nodes.at(i);
+          current = current->next_nodes.at(i);
       }
+          prev_nodes.at(i) = current;
     } 
     //check for double adding
     if((prev_nodes.front()->next_nodes.front() != NULL) && target.compare(prev_nodes.front()->next_nodes.front()->data) == 0)
@@ -127,13 +129,16 @@ namespace cs3505
  */
   void string_set::remove(const std::string & target)
   {
-    std::vector<node*> prev_nodes = std::vector<node*>(max_width, head);
+    //point at the head node and creat a vector or null for them. 
+    node *current = head;
+    std::vector<node*> prev_nodes = std::vector<node*>(max_width, NULL);
     for(int i = max_width-1; i >= 0; i--)
     {
-      while((prev_nodes.at(i)->next_nodes.at(i) != NULL) && (target.compare(prev_nodes.at(i)->next_nodes.at(i)->data) > 0))
+      while((current->next_nodes.at(i) != NULL) && (target.compare(current->next_nodes.at(i)->data) > 0))
       {
-        prev_nodes.at(i) = prev_nodes.at(i)->next_nodes.at(i);
+        current = current->next_nodes.at(i);
        }
+       prev_nodes.at(i) = current;
     } 
     //check if the node exists in the string_set
     if(prev_nodes.front() == NULL)
@@ -145,8 +150,7 @@ namespace cs3505
     */
 
     node *node_to_remove = prev_nodes.front()->next_nodes.front();
-    int next_size = node_to_remove->next_nodes.size();
-    for(int i = 0; i < next_size; i++)
+    for(int i = 0; i < node_to_remove->next_nodes.size(); i++)
     {
       prev_nodes.at(i)->next_nodes.at(i) = node_to_remove->next_nodes.at(i);
       node_to_remove->next_nodes.at(i) = NULL;
